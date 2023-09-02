@@ -1,0 +1,69 @@
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = pd.read_csv('diabetes.csv')
+data
+
+data.isnull().sum()
+
+data.corr()
+
+corr = data.corr()
+
+sns.heatmap(corr,annot=True)
+
+sns.pairplot(data,hue='Insulin')
+
+data.dtypes
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_score
+
+X_train,X_test,y_train,y_test = train_test_split(data.iloc[:,0:8],data.iloc[:,-1],test_size=0.2,random_state=42)
+
+X_train.values
+
+X_test.values
+
+y_train
+
+lr = LogisticRegression()
+
+lr.fit(X_train,y_train)
+
+y_pred = lr.predict(X_test)
+y_pred
+
+cross_val_score(lr,X_train,y_train,cv=5,scoring='accuracy').mean()
+
+accuracy_score(y_test,y_pred)
+
+lr.score(X_train,y_train)
+
+# **After Scaling**
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+scaler.fit(X_train)
+
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+lr.fit(X_train_scaled,y_train)
+
+y_pred_1 = lr.predict(X_test_scaled)
+y_pred_1
+
+accuracy_score(y_test,y_pred_1)
+
+lr.score(X_train_scaled,y_train)
+
+cross_val_score(lr,X_train_scaled,y_train,cv=5,scoring='accuracy').mean()
